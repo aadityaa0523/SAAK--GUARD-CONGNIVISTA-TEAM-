@@ -15,7 +15,7 @@ L.Icon.Default.mergeOptions({
 });
 
 // ── Config ──────────────────────────────────────────────────────
-const BACKEND = import.meta.env.VITE_BACKEND_URL ||;
+const BACKEND = import.meta.env.VITE_BACKEND_URL;
 
 // ══════════════════════════════════════════════════════════════════
 //  UTILITIES
