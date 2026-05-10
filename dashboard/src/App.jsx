@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from "react";
-
+BACKEND="https://saak-guard-congnivista-team-qzlk.onrender.com";
 // ── Leaflet + OpenStreetMap (100% FREE, no API key) ──────────────
 // npm install leaflet react-leaflet
 import L from "leaflet";
@@ -449,7 +449,7 @@ function SessionPanel({ session, token, onClose }) {
                 {frames.length > 0 ? (
                   <>
                     <img
-                      src={`${BACKEND}/media/${session.id}/watermarked/frame_${String(frames[currentFrame]?.frame_num || 1).padStart(4, "0")}.jpg`}
+                      src={`${BACKEND}/api/sos/stream`}
                       alt="Live frame"
                       style={{ width: "100%", borderRadius: 10, border: "1px solid #e2e8f0" }}
                     />
