@@ -65,7 +65,7 @@ import anthropic
 # ── QR Auth ───────────────────────────────────────────────────────
 import pyotp
 import qrcode
-latest_decrypted_frame=None
+
 
 # ── Setup ─────────────────────────────────────────────────────────
 logging.basicConfig(level=logging.INFO)
@@ -531,8 +531,7 @@ async def receive_frame(
     ts = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC")
     wm_frame = apply_watermark(raw_frame, x_device_id, x_session_id,
                                frame_num, lat, lon, ts)
-    global latest_decrypted_frame
-    latest_decrypted_frame=wm_frame
+    
 
     # Save to disk
     session_dir  = MEDIA_DIR / x_session_id
@@ -802,18 +801,3 @@ async def health():
 if __name__ == "__main__":
     port = int(os.getenv("PORT", 8000))
     uvicorn.run("main:app", host="0.0.0.0", port=port, reload=False)
-from fastapi.responses import StreamingResponse
-import asyncio
-
-async def frame_generator():
-    global latest_decrypted_frame
-    while True:
-        if latest_decrypted_frame:
-            yield (b'--frame\r\n'
-                   b'Content-Type: image/jpeg\r\n\r\n' + latest_decrypted_frame + b'\r\n')
-        await asyncio.sleep(0.1)  # Adjust for smooth video
-
-@app.get("/api/sos/stream")
-async def sos_stream():
-    return StreamingResponse(frame_generator(), 
-                             media_type="multipart/x-mixed-replace; boundary=frame")
